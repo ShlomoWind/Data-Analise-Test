@@ -4,21 +4,26 @@ class Cleaner:
         self.tweets_column = tweets_column
         self.biased_column = biased_column
 
+#removes all columns except tweets and classification
     def drop_columns(self):
         self.df = self.df[[self.tweets_column,self.biased_column]]
         return self
 
+#removes all punctuation marks.
     def clean_text(self):
         self.df[self.tweets_column] = self.df[self.tweets_column].str.replace(r'[^\w\s]', '', regex=True)
         return self
 
+#converts all letters to lowercase.
     def convert_to_lower(self):
         self.df[self.tweets_column] = self.df[self.tweets_column].str.lower()
         return self
 
+#removes all rows that are not in the classification.
     def remove_unclassified(self):
         self.df = self.df[self.df[self.biased_column].isin([1,0])]
         return self
 
+#returns the clean data frame.
     def get_clean_df(self):
         return self.df
