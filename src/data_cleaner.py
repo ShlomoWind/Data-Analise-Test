@@ -1,6 +1,3 @@
-import pandas as pd
-
-
 class Cleaner:
     def __init__(self,data_frame,tweets_column,biased_column):
         self.df = data_frame
