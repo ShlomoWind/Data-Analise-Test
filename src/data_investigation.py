@@ -1,8 +1,8 @@
 import pandas as pd
 
 class Explore:
-    def __init__(self,csv_file_path):
-        self.data = csv_file_path
+    def __init__(self, data_frame):
+        self.df = data_frame
 
 #tweets counter by category and total
     def number_of_tweets(self):
