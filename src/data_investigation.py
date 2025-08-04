@@ -27,12 +27,32 @@ class Explore:
 
 #the three longest tweets by each category
     def three_longest_tweets(self):
-        pass
+        self.df['count_chars'] = self.df[self.tweets_column].apply(lambda x: len(str(x)))
+        anti = self.df[self.df[self.biased_column]==1]
+        non_anti = self.df[self.df[self.biased_column]==0]
+        anti_long = anti.sort_values(by='count_chars',ascending=False).head(3)[self.tweets_column].tolist()
+        non_anti_long = non_anti.sort_values(by='count_chars',ascending=False).head(3)[self.tweets_column].tolist()
+        return { "antisemitic": anti_long,
+                 "non_antisemitic": non_anti_long}
 
 #the ten most common words in all tweets
     def ten_most_common_words(self):
-        pass
+        full_data = ''.join(self.df[self.tweets_column].tolist()).lower().split()
+        word_counter = pd.Series(full_data).value_counts()
+        return {"total": word_counter.head(10).index.to_list()}
 
 #how many words in capital letters by each category and total
     def number_of_capital_letters(self):
-        pass
+        capital_counter = {"antisemitic":0,"non_antisemitic":0,"total":0}
+        for index, row in self.df.iterrows():
+            tweet = str(row[self.tweets_column])
+            words = tweet.split()
+            upper_words = sum(1 for word in words if word.isupper())
+            if row[self.biased_column] == 1:
+                capital_counter["antisemitic"] += upper_words
+            elif row[self.biased_column] == 0:
+                capital_counter["non_antisemitic"] += upper_words
+            capital_counter["total"] += upper_words
+        return capital_counter
+
+
